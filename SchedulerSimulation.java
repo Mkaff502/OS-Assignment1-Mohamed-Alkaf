@@ -1,6 +1,8 @@
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.Map;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -30,6 +32,9 @@ class Process implements Runnable {
     private int timeQuantum; // Time slice (time quantum) allowed per CPU access (in milliseconds)
     private int remainingTime; // Time left for the process to finish its execution
     private int priority; // Priority from 1 to 10 (10 = highest)
+    private int waitingTime;
+    private int turnaroundTime;
+    private long queueEntryTime;
 
     // Constructor to initialize the process with name, burst time, and time quantum
     public Process(String name, int burstTime, int timeQuantum) {
@@ -41,8 +46,13 @@ class Process implements Runnable {
     }
     public int getPriority() {
     return priority;
+}   
+    public void markQueueEntry() {
+    queueEntryTime = System.currentTimeMillis();
+}    
+    public void updateWaitingTime() {
+    waitingTime += (int) (System.currentTimeMillis() - queueEntryTime);
 }
-
     // This method will be called when the thread for this process is started
     @Override
     public void run() {
@@ -141,6 +151,17 @@ class Process implements Runnable {
     public int getRemainingTime() {
         return remainingTime;
     }
+    public int getWaitingTime() {
+        return waitingTime;
+    }
+
+    public int getTurnaroundTime() {
+        return turnaroundTime;
+    }
+    public void setTurnaroundTime(int time) {
+        this.turnaroundTime = waitingTime + burstTime;
+        
+    }
 
     // Check if the process has finished (i.e., no remaining time)
     public boolean isFinished() {
@@ -172,6 +193,8 @@ static Process previousProcess = null;
         
         // Map to associate each thread with its respective process object
         Map<Thread, Process> processMap = new HashMap<>();
+        int currentTime = 0;
+        List<Process> allProcesses = new ArrayList<>();
         
         // Print simulation header with elegant formatting
         System.out.println("\n" + Colors.BOLD + Colors.BRIGHT_CYAN + 
@@ -207,6 +230,7 @@ static Process previousProcess = null;
             
             // Create a new process object with a unique name, burst time, and the defined time quantum
             Process process = new Process("P" + i, burstTime, timeQuantum);
+            allProcesses.add(process);
             
             // Add the process to the ready queue and the map
             addProcessToQueue(process, processQueue, processMap);
@@ -251,6 +275,9 @@ static Process previousProcess = null;
             System.out.println(Colors.BOLD + Colors.MAGENTA + "└" + "─".repeat(79) + Colors.RESET + "\n");
             
             // Start the thread, which will run the process for one time quantum
+            Process runningProcess = processMap.get(currentThread);
+            runningProcess.updateWaitingTime();
+            int executedTime = Math.min(timeQuantum, runningProcess.getRemainingTime());
             currentThread.start();
             
             try {
@@ -259,9 +286,14 @@ static Process previousProcess = null;
             } catch (InterruptedException e) {
                 System.out.println("Main thread interrupted.");
             }
+            currentTime += executedTime;
             
             // Retrieve the process associated with the thread from the map
             Process process = processMap.get(currentThread);
+            if (process.isFinished()) {
+    process.setTurnaroundTime(currentTime);
+}
+
             
             // Check if the process is not finished
             if (!process.isFinished()) {
@@ -274,7 +306,11 @@ static Process previousProcess = null;
                     System.out.println(Colors.BRIGHT_YELLOW + "  ⚠ " + Colors.CYAN + process.getName() + 
                                       Colors.RESET + Colors.YELLOW + " is the last process → running to completion" + 
                                       Colors.RESET);
-                    process.runToCompletion(); // Run until the process completes
+                    int lastRunTime = process.getRemainingTime();
+                    process.runToCompletion();
+                    currentTime += lastRunTime;
+                    process.setTurnaroundTime(currentTime);
+    
                 }
             }
         }
@@ -290,7 +326,26 @@ static Process previousProcess = null;
         System.out.println(Colors.BOLD + Colors.BRIGHT_GREEN + 
                           "╚════════════════════════════════════════════════════════════════════════════════╝" + 
                           Colors.RESET + "\n");
-    }
+                          System.out.println("Total Context Switches: " + contextSwitchCount);
+                          System.out.println("\nPROCESS RESULTS");
+                          System.out.printf("%-12s %-15s %-15s %-18s%n",
+                                 "Process", "Burst Time", "Waiting Time", "Turnaround Time");
+                          for (Process p : allProcesses) {
+                             System.out.printf("%-12s %-15d %-15d %-18d%n",
+                             p.getName(),
+                             p.getBurstTime(),
+                             p.getWaitingTime(),
+                             p.getTurnaroundTime());
+}
+   
+
+    
+}
+
+    
+    
+
+    
     
     // Method to add a process to the queue and map, while printing a "ready" message
     public static void addProcessToQueue(Process process, Queue<Thread> processQueue, 
@@ -299,6 +354,7 @@ static Process previousProcess = null;
         Thread thread = new Thread(process);
         
         // Add the thread to the ready queue
+        process.markQueueEntry();
         processQueue.add(thread);
         
         // Map the thread to the process, so we can track the process associated with each thread
@@ -306,6 +362,7 @@ static Process previousProcess = null;
         
         // Print a message indicating the process has entered the ready queue
         System.out.println(Colors.BLUE + "  ➕ " + Colors.BOLD + Colors.CYAN + process.getName() + 
+
                           Colors.RESET + Colors.BLUE + " added to ready queue" + Colors.RESET + 
                           " │ Burst time: " + Colors.YELLOW + process.getBurstTime() + "ms" + " | Priority: " + process.getPriority() +
                           Colors.RESET);
