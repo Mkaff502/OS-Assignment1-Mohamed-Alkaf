@@ -129,68 +129,73 @@
 
 ## Your Development Log
 
-### Entry 1 - [Date and Time]
-**What I did**:
+### Entry 1 - [October 4, 2026, 8:00 PM]
 
-**Details**:
+**What I did**: Set up the assignment repository and changed the student ID.
 
-**Challenges**:
+**Details**: I opened the starter project in VS Code, changed the student ID to 446052502, and ran the program to make sure it worked.
 
-**Solution**:
+**Challenges**: I need to understand the project structure and where the student ID should be changed.
 
-**Time spent**:
+**Solution**: I checked the instructions and located the student ID inside the main method, then tested the program.
 
----
-
-### Entry 2 - [Date and Time]
-**What I did**:
-
-**Details**:
-
-**Challenges**:
-
-**Solution**:
-
-**Time spent**:
+**Time spent**: 30 minutes
 
 ---
 
-### Entry 3 - [Date and Time]
-**What I did**:
+### Entry 2 - [October 5, 2026, 7:30 PM]
 
-**Details**:
+**What I did**: Add the process priority feature.
 
-**Challenges**:
+**Details**: I added a random priority from 1 to 10 for each process and displayed the priority when the process enters the ready queue. I kept the FIFO scheduling behavior unchanged.
 
-**Solution**:
+**Challenges**: I needed to add the priority without changing how processes are scheduled.
 
-**Time spent**:
+**Solution**: I stored the priority in the Process class and only displayed it in the ready queue message.
 
----
-
-### Entry 4 - [Date and Time]
-**What I did**:
-
-**Details**:
-
-**Challenges**:
-
-**Solution**:
-
-**Time spent**:
+**Time spent**: 40 minutes
 
 ---
 
-### Entry 5 - [Date and Time]
-**What I did**:
+### Entry 3 - [October 6, 2026, 8:15 PM]
 
-**Details**:
+**What I did**: Added the context switch counter.
 
-**Challenges**:
+**Details**: I added a static counter to track context switches while the scheduler is running. The program increments the counter when a new process starts running and displays the total number at the end.
 
-**Solution**:
+**Challenges**: I needed to decide where the counter should be updated so it would count the switches correctly.
 
-**Time spent**:
+**Solution**: I updat the counter in the scheduler before the next process starts running and tested the final output.
+
+**Time spent**: 35 minutes
+
+---
+
+### Entry 4 - [October 8, 2026, 9:00 PM]
+
+**What I did**: Added waiting time tracking for each process.
+
+**Details**: I used System.currentTimeMillis() to record when a process enters the ready queue and calculate how long it waits before running. I also displayed the waiting time and turnaround time in the final results.
+
+**Challenges**: The existing code was calculating waiting time differently, so I needed to avoid overwriting the measured waiting time.
+
+**Solution**: I updated the waiting time when the process leaves the ready queue and calculated turnaround time using waiting time plus burst time.
+
+**Time spent**: 45 minutes
+
+---
+
+### Entry 5 - [October 9, 2026, 10:00 PM]
+
+**What I did**: Tested the completed scheduler and checked the final output.
+
+**Details**: I ran the program after completing the three required features. I checked that process priorities were displayed, context switches were counted, and the final table showed burst time, waiting time, and turnaround time.
+
+**Challenges**: I needed to make sure the new features worked together without changing the original scheduling behavior.
+
+**Solution**: I ran the complete simulation and reviewed the output to confirm that all processes finished successfully and the required results were displayed.
+
+**Time spent**: 30 minutes
 
 ---
 
@@ -211,13 +216,13 @@
 
 > 💡 **TIP:** Fill this in **last**, after all entries are written.
 
-**Total time spent on assignment**: [X hours]
+**Total time spent on assignment**: [4 hours]
 
-**Most challenging part**:
+**Most challenging part**: Tracking the waiting time correctly without changing the original schedular behavior
 
-**Most interesting learning**:
+**Most interesting learning**: Learning how the scheduler switches between processes and how waiting time and turnaround time are calculated.
 
-**What I would do differently next time**:
+**What I would do differently next time**: I would test each feature immediately after adding it before moving to the next feature.
 
 ---
 
@@ -237,7 +242,7 @@
 
 **Your Answer:** *(5-7 sentences)*
 
-[Write your answer here.]
+I learned that multithreading allows a program to run multiple threads and manage different processes. In this assignment, each process implements Runnable and runs inside a Thread. I learned that Thread.start() is used to start a thread and execute its run() method. I also saw how Thread.sleep() can be used to simulate the burst time of a process. Thread.join() makes the scheduler wait for a thread to finish before continuing. What surprised me was how the scheduler can control many threads while still following the FIFO ready queue.
 
 ## Question 2: What was the most challenging part of this assignment?
 
@@ -245,7 +250,7 @@
 
 **Your Answer:** *(5-7 sentences)*
 
-[Write your answer here.]
+The most challenging part for me was tracking the waiting time correctly. I had to understand when a process enters the ready queue and when it starts running. At first, it was difficult to know where to use System.currentTimeMillis() in the code. I also had to make sure the waiting time was updated every time a process returned to the queue. Another challenge was calculating turnaround time without changing the FIFO scheduling behavior. After testing the program, I was able to see the waiting time and turnaround time correctly in the final table.
 
 ## Question 3: How did you overcome the challenges you faced?
 
@@ -253,7 +258,7 @@
 
 **Your Answer:** *(5-7 sentences)*
 
-[Write your answer here.]
+I overcame the challenges by making small changes to the code and testing them one at a time. I reviewed the assignment instructions to make sure I understood what each feature required. For the waiting time feature, I checked where each process enters the ready queue and where it starts running. I ran the program several times and checked the output after making changes. I also compared the waiting time and turnaround time in the final table to make sure the calculation was correct. This helped me understand the code better and fix the problems without changing the FIFO scheduling behavior.
 
 ## Question 4: How can you apply multithreading concepts in real-world applications?
 
@@ -261,7 +266,7 @@
 
 **Your Answer:** *(5-7 sentences)*
 
-[Write your answer here.]
+Multithreading can be used in many real-world applications to perform different tasks at the same time. For example, a web browser can use different threads to load a web page, download files, and respond to user actions. A mobile application can use one thread for the user interface and other threads for background tasks. This is similar to the assignment because each process was represented by a thread with its own work to complete. The scheduler controlled when each process could run, while the threads performed their tasks. I learned that using multiple threads can help applications stay responsive while other work is being done.
 
 ### Optional: What would you like to learn more about?
 
@@ -293,7 +298,7 @@
 
 **Your Answer:** *(3-5 sentences)*
 
-[Write your answer here.]
+A process is an independent running program, while a thread is a smaller unit of execution inside a process. Separate processes normally have separate memory, while threads in the same process can share memory and data. Threads also have less creation overhead and can communicate faster than separate processes. In this assignment, the Process class represents a simulated process, but it is actually executed by a Java thread using new Thread(process) inside addProcessToQueue(). We used threads because they make it easier to simulate and control multiple processes inside one Java program.
 
 ## Question 2: Ready Queue Behavior
 
@@ -305,15 +310,20 @@
 
 **Your Answer:** *(3-5 sentences)*
 
-[Write your answer here.]
+[When a process does not finish within its time quantum, it gives up the CPU and is added back to the ready queue. In my run, P2 had a burst time of 3083ms and the time quantum was 2000ms. After the first quantum, P2 had 1083ms remaining and was re-queued one time before it could finish. Re-queuing is important for fairness because it gives the other processes in the ready queue a chance to use the CPU.
 
 Example from my output:
 ```
-[Paste a relevant snippet from your program output here showing a process being re-queued]
+[P2 completed quantum 2000ms
+Remaining time: 1083ms
+P2 yields CPU for context switch
+P2 added to ready queue | Burst time: 3083ms | Priority: 8
 ```
 
 **Explanation of example:**
 [Explain what is happening in the output snippet you pasted.]
+
+This output shows that P2 used its 2000ms time quantum but still had 1083ms remaining. It yielded the CPU and was added back to the ready queue so the other processes could run before P2 got another turn.
 
 ## Question 3: Thread Lifecycle
 
@@ -323,15 +333,15 @@ Example from my output:
 
 **Your Answer:** *(3-5 sentences overall; one short explanation per state)*
 
-1. **New**: [When is P1 in the New state?]
+1. **New**: P1 is in the New state when its Thread object is created using `new Thread(process)` inside `addProcessToQueue()`.
 
-2. **Runnable**: [When does P1 become Runnable?]
+2. **Runnable**: P1 becomes Runnable after the scheduler calls `Thread.start()`, meaning it is ready to be scheduled by Java.
 
-3. **Running**: [When is P1 Running?]
+3. **Running**: P1 is Running when its `run()` method is executing and it performs its work for the current time quantum using `Thread.sleep()`.
 
-4. **Waiting**: [When and why would a thread be Waiting?]
+4. **Waiting**: The main thread enters the Waiting state when it calls `Thread.join()` and waits for P1's thread to finish. P1 itself is sleeping during `Thread.sleep()`, not waiting on `join()`.
 
-5. **Terminated**: [When is P1 Terminated?]
+5. **Terminated**: P1 is Terminated when its `run()` method finishes and its thread completes execution.
 
 ## Question 4: Real-World Applications
 
@@ -341,32 +351,32 @@ Example from my output:
 
 **Your Answer:** *(3-5 sentences per example)*
 
-### Example 1 (operating-system level): [Name of scenario]
+### Example 1 (operating-system level): CPU Scheduling
 
 **Description**:
-[Describe the real-world scenario.]
+An operating system can use Round-Robin scheduling to share CPU time between multiple running processes. Each process receives a time quantum, similar to the processes in my scheduler simulation.
 
 **Why Round-Robin works well here**:
-[Fairness, responsiveness, predictability?]
+Round-Robin provides fairness because each process gets a turn to use the CPU. It also improves responsiveness because one long process cannot keep the CPU for too long.
 
-### Example 2: [Name of application/scenario]
+### Example 2: Web Browser
 
 **Description**:
-[Describe the real-world scenario or application.]
+A web browser can have multiple threads doing different tasks, such as loading pages, downloading files, and responding to user actions.
 
 **Why Round-Robin works well here**:
-[Fairness, responsiveness, predictability?]
+Sharing CPU time between these tasks gives each task a chance to run and helps keep the browser responsive.
 
 ## Summary
 
 **Key concepts I understood through these questions:**
-1.
-2.
-3.
+1. The difference between a process and a thread.
+2. How Round-Robin scheduling uses a time quantum and a ready queue.
+3. How threads move through different lifecycle states.
 
 **Concepts I need to study more:**
-1.
-2.
+1. Thread synchronization and communication.
+2. How operating systems perform context switching in real systems.
 
 ---
 
